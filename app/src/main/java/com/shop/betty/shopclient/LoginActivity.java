@@ -1,26 +1,20 @@
 package com.shop.betty.shopclient;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.shop.betty.shopclient.content.User;
+import com.shop.betty.shopclient.service.ProductManager;
+import com.shop.betty.shopclient.util.Cancellable;
 
 
 public class LoginActivity extends AppCompatActivity {
-
+   private Cancellable mCancellable;
+   private ProductManager mProductManager;
 
    TextView tx1;
 
@@ -38,7 +32,13 @@ public class LoginActivity extends AppCompatActivity {
       setupToolbar();
 
    }
-
+   @Override
+   protected void onStop() {
+      super.onStop();
+      if (mCancellable != null) {
+         mCancellable.cancel();
+      }
+   }
 
    private void setupToolbar() {
       Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -56,7 +56,7 @@ public class LoginActivity extends AppCompatActivity {
    }
 
    private void startProductListActivity() {
-      startActivity(new Intent(this, ProductListActivity.class));
+      startActivity(new Intent(this, ProductListActivityO.class));
    }
 
 

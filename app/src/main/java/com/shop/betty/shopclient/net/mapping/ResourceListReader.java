@@ -1,22 +1,21 @@
-package com.shop.betty.shopclient.util;
+package com.shop.betty.shopclient.net.mapping;
 
 import android.util.JsonReader;
-import android.util.Log;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ResourceListReader<E> implements ResourceReader<List<E>> {
+public class ResourceListReader<E> implements ResourceReader<List<E>,JsonReader> {
 
-    private final ResourceReader<E> mResourceReader;
+    private final ResourceReader<E,JsonReader> mResourceReader;
 
-    public ResourceListReader(ResourceReader<E> resourceReader) {
+    public ResourceListReader(ResourceReader<E,JsonReader> resourceReader) {
         mResourceReader = resourceReader;
     }
 
     @Override
-    public List<E> read(JsonReader reader) throws IOException {
+    public List<E> read(JsonReader reader) throws Exception {
         List<E> entityList = new ArrayList<E>();
         reader.beginArray();
         while (reader.hasNext()) {

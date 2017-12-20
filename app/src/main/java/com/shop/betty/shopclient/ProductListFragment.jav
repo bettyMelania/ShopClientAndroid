@@ -16,7 +16,6 @@ import android.widget.ListView;
 
 import com.shop.betty.shopclient.content.Product;
 import com.shop.betty.shopclient.util.OkAsyncTask;
-import com.shop.betty.shopclient.util.OkAsyncTaskLoader;
 import com.shop.betty.shopclient.util.OkCancellableCall;
 import com.shop.betty.shopclient.util.OnErrorListener;
 import com.shop.betty.shopclient.util.OnSuccessListener;

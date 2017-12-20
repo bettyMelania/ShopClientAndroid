@@ -5,35 +5,35 @@ package com.shop.betty.shopclient.content;
  */
 
 public class Product {
-    private int id;
+
+    public enum Status {
+        active,
+        archived;
+    }
+
     private String name;
-    private double price;
-    private int amount;
+    private String price;
+    private String amount;
+
+    private String id;
+    private String userId;
+    private Status status = Status.active;
     private long updated;
+    private int version;
 
-    public long getUpdated() {
-        return updated;
-    }
-
-    public void setUpdated(long updated) {
-        this.updated = updated;
-    }
 
     public Product(){}
 
-    public Product(int id, String name, double price, int amount) {
-        this.id = id;
+
+    public Product(String name, String price, String amount, String id, String userId, Status status, long updated, int version) {
         this.name = name;
         this.price = price;
         this.amount = amount;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
         this.id = id;
+        this.userId = userId;
+        this.status = status;
+        this.updated = updated;
+        this.version = version;
     }
 
     public String getName() {
@@ -44,19 +44,59 @@ public class Product {
         this.name = name;
     }
 
-    public double getPrice() {
+    public String getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(String price) {
         this.price = price;
     }
 
-    public int getAmount() {
+    public String getAmount() {
         return amount;
     }
 
-    public void setAmount(int amount) {
+    public void setAmount(String amount) {
         this.amount = amount;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public long getUpdated() {
+        return updated;
+    }
+
+    public void setUpdated(long updated) {
+        this.updated = updated;
+    }
+
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
     }
 }

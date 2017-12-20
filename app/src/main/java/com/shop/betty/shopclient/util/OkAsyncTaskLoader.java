@@ -1,7 +1,7 @@
 package com.shop.betty.shopclient.util;
 
+import android.content.AsyncTaskLoader;
 import android.content.Context;
-import android.support.v4.content.AsyncTaskLoader;
 import android.util.Log;
 
 public abstract class OkAsyncTaskLoader<T> extends AsyncTaskLoader<T> {

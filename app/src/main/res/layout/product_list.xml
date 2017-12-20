@@ -9,5 +9,5 @@
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
     app:layoutManager="LinearLayoutManager"
-    tools:context="com.shop.betty.shopclient.ProductListActivity"
+    tools:context="com.shop.betty.shopclient.ProductListActivityO"
     tools:listitem="@layout/product_list_content" />
