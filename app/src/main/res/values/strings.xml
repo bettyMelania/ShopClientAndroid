@@ -2,4 +2,6 @@
     <string name="app_name">MyShop</string>
     <string name="action_settings">Settings</string>
     <string name="api_url">http://192.168.100.3:3000</string>
+    <string name="title_product_detail">Product Detail</string>
+    <string name="title_activity_login">LoginActivity</string>
 </resources>

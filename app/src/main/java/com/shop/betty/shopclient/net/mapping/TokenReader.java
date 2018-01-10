@@ -4,7 +4,7 @@ import android.util.JsonReader;
 
 import java.io.IOException;
 
-import static com.example.ilazar.mykeep.net.mapping.Api.Auth.TOKEN;
+import static com.shop.betty.shopclient.net.mapping.Api.Auth.TOKEN;
 
 public class TokenReader implements ResourceReader<String, JsonReader> {
   @Override

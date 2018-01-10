@@ -5,6 +5,19 @@ package com.shop.betty.shopclient.content;
  */
 
 public class Product {
+    @Override
+    public String toString() {
+        return "Product{" +
+                "name='" + name + '\'' +
+                ", price='" + price + '\'' +
+                ", amount='" + amount + '\'' +
+                ", id='" + id + '\'' +
+                ", userId='" + userId + '\'' +
+                ", status=" + status +
+                ", updated=" + updated +
+                ", version=" + version +
+                '}';
+    }
 
     public enum Status {
         active,
@@ -15,6 +28,7 @@ public class Product {
     private String price;
     private String amount;
 
+    private String _id;
     private String id;
     private String userId;
     private Status status = Status.active;
@@ -25,15 +39,24 @@ public class Product {
     public Product(){}
 
 
-    public Product(String name, String price, String amount, String id, String userId, Status status, long updated, int version) {
+    public Product(String name, String price, String amount, String id,String _id, String userId, Status status, long updated, int version) {
         this.name = name;
         this.price = price;
         this.amount = amount;
         this.id = id;
+        this._id=_id;
         this.userId = userId;
         this.status = status;
         this.updated = updated;
         this.version = version;
+    }
+
+    public String get_id() {
+        return _id;
+    }
+
+    public void set_id(String _id) {
+        this._id = _id;
     }
 
     public String getName() {

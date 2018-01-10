@@ -51,10 +51,10 @@ public class ProductSocketClient {
         public void call(Object... args) {
           try {
             Product p = new ProductJsonObjectReader().read((JSONObject) args[0]);
-            Log.d(TAG, String.format("note created %s", p.toString()));
+            Log.d(TAG, String.format("product created %s", p.toString()));
             mResourceListener.onCreated(p);
           } catch (Exception e) {
-            Log.w(TAG, "note created", e);
+            Log.w(TAG, "productproduct created", e);
             mResourceListener.onError(new ResourceException(e));
           }
         }
@@ -64,10 +64,10 @@ public class ProductSocketClient {
         public void call(Object... args) {
           try {
             Product p = new ProductJsonObjectReader().read((JSONObject) args[0]);
-            Log.d(TAG, String.format("note updated %s", p.toString()));
+            Log.d(TAG, String.format("product updated %s", p.toString()));
             mResourceListener.onUpdated(p);
           } catch (Exception e) {
-            Log.w(TAG, "note updated", e);
+            Log.w(TAG, "product updated", e);
             mResourceListener.onError(new ResourceException(e));
           }
         }
@@ -80,7 +80,7 @@ public class ProductSocketClient {
             Log.d(TAG, String.format("note deleted %s", id));
             mResourceListener.onDeleted(id);
           } catch (Exception e) {
-            Log.w(TAG, "note deleted", e);
+            Log.w(TAG, "product deleted", e);
             mResourceListener.onError(new ResourceException(e));
           }
         }

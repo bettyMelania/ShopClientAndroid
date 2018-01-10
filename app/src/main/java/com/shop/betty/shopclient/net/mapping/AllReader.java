@@ -22,7 +22,7 @@ public class AllReader implements ResourceReader<List<Product>,JsonReader> {
     }
 
     @Override
-    public List<Product> read(JsonReader reader) throws IOException {
+    public List<Product> read(JsonReader reader) throws Exception {
         List<Product> entityList = new ArrayList<Product>();
 
         reader.beginObject();

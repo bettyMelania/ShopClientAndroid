@@ -40,6 +40,7 @@ public class ProductManager extends Observable {
   public ProductManager(Context context) {
     mContext = context;
     mKD = new Database(context);
+
   }
 
   public CancellableCallable<LastModifiedList<Product>> getProductsCall() {
@@ -130,7 +131,7 @@ public class ProductManager extends Observable {
   }
 
   public void subscribeChangeListener() {
-    mProductSocketClient.subscribe(new ResourceChangeListener<Product>() {
+      mProductSocketClient.subscribe(new ResourceChangeListener<Product>() {
       @Override
       public void onCreated(Product Product) {
         Log.d(TAG, "changeListener, onCreated");
@@ -160,8 +161,13 @@ public class ProductManager extends Observable {
           notifyObservers();
         }
       }
+      @Override()
+      public void notifyObservers() {
+        mProductSocketClient.notify();
+      }
 
-      @Override
+
+        @Override
       public void onError(Throwable t) {
         Log.e(TAG, "changeListener, error", t);
       }
@@ -169,7 +175,7 @@ public class ProductManager extends Observable {
   }
 
   public void unsubscribeChangeListener() {
-    mProductSocketClient.unsubscribe();
+      mProductSocketClient.unsubscribe();
   }
 
   public void setProductSocketClient(ProductSocketClient ProductSocketClient) {

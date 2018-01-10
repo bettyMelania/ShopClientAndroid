@@ -7,11 +7,15 @@ public class Api {
     public static final String PRODUCT_CREATED = "product/created";
     public static final String PRODUCT_DELETED = "product/deleted";
     public static final String _ID = "_id";
+    public static final String ID = "id";
     public static final String NAME = "name";
     public static final String STATUS = "status";
     public static final String UPDATED = "updated";
     public static final String USER_ID = "user";
     public static final String VERSION = "version";
+    public static final String PRICE = "price";
+    public static final String AMOUNT = "amount";
+
   }
   public static class Auth {
     public static final String TOKEN = "token";

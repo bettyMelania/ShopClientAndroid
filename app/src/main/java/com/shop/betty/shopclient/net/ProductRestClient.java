@@ -118,6 +118,10 @@ public class ProductRestClient {
     if (user != null) {
       requestBuilder.header("Authorization", String.format("Bearer %s", user.getToken()));
     }
+    else{
+     System.out.println("user is null");
+    }
+
   }
 
   public Cancellable searchAsync(
@@ -175,6 +179,7 @@ public class ProductRestClient {
   public Cancellable updateAsync(Product product,
                                  final OnSuccessListener<Product> successListener,
                                  final OnErrorListener errorListener) {
+
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
     try {
       JsonWriter writer = new JsonWriter(new OutputStreamWriter(baos, UTF_8));
@@ -198,6 +203,7 @@ public class ProductRestClient {
               if (code == 400 || code == 409 || code == 405) { //bad request, conflict, method not allowed
                 throw new ResourceException(new ResourceListReader<Issue>(new IssueReader()).read(reader));
               }
+              Log.d(TAG, "response: " +response.message());
               return new ProductReader().read(reader);
             }
           },

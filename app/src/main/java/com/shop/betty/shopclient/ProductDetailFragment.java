@@ -9,36 +9,26 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.shop.betty.shopclient.content.Product;
 import com.shop.betty.shopclient.util.Cancellable;
+import com.shop.betty.shopclient.util.DialogUtils;
 import com.shop.betty.shopclient.util.OnErrorListener;
 import com.shop.betty.shopclient.util.OnSuccessListener;
 
 public class ProductDetailFragment extends Fragment {
     public static final String TAG = ProductDetailFragment.class.getSimpleName();
-
-    /**
-     * The fragment argument representing the item ID that this fragment represents.
-     */
     public static final String PRODUCT_ID = "product_id";
-
-    /**
-     * The dummy content this fragment is presenting.
-     */
-    private Product mProduct;
-
+    public static Product mProduct;
     private App mApp;
-
-    private Cancellable mFetchNoteAsync;
-    private TextView mNoteTextView;
+    private Cancellable mFetchProductAsync;
+    private EditText mProductName;
+    private EditText mProductPrice;
+    private EditText mProductAmount;
     private CollapsingToolbarLayout mAppBarLayout;
 
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
     public ProductDetailFragment() {
     }
 
@@ -66,9 +56,12 @@ public class ProductDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView");
         View rootView = inflater.inflate(R.layout.product_detail, container, false);
-        mNoteTextView = (TextView) rootView.findViewById(R.id.product_name);
-        fillNoteDetails();
-        fetchNoteAsync();
+
+        mProductName = (EditText) rootView.findViewById(R.id.product_name);
+        mProductPrice = (EditText) rootView.findViewById(R.id.product_price);
+        mProductAmount = (EditText) rootView.findViewById(R.id.product_amount);
+        fillProductDetails();
+        fetchProductAsync();
         return rootView;
     }
 
@@ -78,18 +71,18 @@ public class ProductDetailFragment extends Fragment {
         super.onStop();
     }
 
-    private void fetchNoteAsync() {
-        mFetchNoteAsync = mApp.getProductManager().getProductAsync(
+    private void fetchProductAsync() {
+        mFetchProductAsync = mApp.getProductManager().getProductAsync(
                 getArguments().getString(PRODUCT_ID),
                 new OnSuccessListener<Product>() {
 
                     @Override
-                    public void onSuccess(final Product note) {
+                    public void onSuccess(final Product product) {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                mProduct = note;
-                                fillNoteDetails();
+                                mProduct = product;
+                                fillProductDetails();
                             }
                         });
                     }
@@ -107,12 +100,14 @@ public class ProductDetailFragment extends Fragment {
                 });
     }
 
-    private void fillNoteDetails() {
+    private void fillProductDetails() {
         if (mProduct != null) {
             if (mAppBarLayout != null) {
                 mAppBarLayout.setTitle(mProduct.getName());
             }
-            mNoteTextView.setText(mProduct.getName());
+            mProductName.setText(mProduct.getName());
+            mProductPrice.setText(mProduct.getPrice());
+            mProductAmount.setText(mProduct.getAmount());
         }
     }
 }
