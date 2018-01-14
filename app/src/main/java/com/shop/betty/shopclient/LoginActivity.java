@@ -7,10 +7,8 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.shop.betty.shopclient.content.User;
 import com.shop.betty.shopclient.service.ProductManager;
@@ -24,19 +22,15 @@ public class LoginActivity extends AppCompatActivity {
    private Cancellable mCancellable;
    private ProductManager mProductManager;
 
-   TextView tx1;
-
    @Override
    protected void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
       setContentView(R.layout.activity_login);
       mProductManager = ((App) getApplication()).getProductManager();
       User user = mProductManager.getCurrentUser();
-      //User user=new User("betty","betty");
       if (user != null) {
          mProductManager.setCurrentUser(user);
          startProductListActivity();
-         //finish();
       }
       setupToolbar();
       Button b = (Button) findViewById(R.id.button);

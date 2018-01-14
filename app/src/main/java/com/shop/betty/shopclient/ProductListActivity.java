@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.shop.betty.shopclient.content.Product;
 import com.shop.betty.shopclient.util.Cancellable;
 import com.shop.betty.shopclient.util.DialogUtils;
+import com.shop.betty.shopclient.util.Network;
 import com.shop.betty.shopclient.util.OnErrorListener;
 import com.shop.betty.shopclient.util.OnSuccessListener;
 
@@ -53,8 +54,12 @@ public class ProductListActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         Log.d(TAG, "onStart");
-        startGetProductsAsyncCall();
+        showLoadingIndicator();
         mApp.getProductManager().subscribeChangeListener();
+        if(Network.isNetworkConnected(this))
+            startGetProductsAsyncCall();
+        else
+            showContent(mApp.getProductManager().getProductsFromDatabase());
     }
 
     @Override
@@ -76,15 +81,14 @@ public class ProductListActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                mApp.getProductManager().logout();
                 toLoginPage();
-
                 Snackbar.make(view, "LOGOUT & Going to login page", Snackbar.LENGTH_INDEFINITE)
                         .setAction("Action", null).show();
             }
         });
     }
     private void toLoginPage(){
-        mApp.getProductManager().setCurrentUser(null);
         startActivity(new Intent(this, LoginActivity.class));
     }
 
@@ -252,7 +256,6 @@ public class ProductListActivity extends AppCompatActivity {
                     } else {
                         Context context = v.getContext();
                         Intent intent = new Intent(context, ProductDetailActivity.class);
-                        Log.d("aici",holder.mItem.toString());
                         intent.putExtra(ProductDetailFragment.PRODUCT_ID, holder.mItem.getId());
                         context.startActivity(intent);
                     }

@@ -7,6 +7,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
 import android.util.Log;
 import android.view.View;
 import android.support.v7.app.AppCompatActivity;
@@ -78,6 +79,8 @@ public class ProductDetailActivity extends AppCompatActivity {
     EditText productAmount = (EditText) findViewById(R.id.product_amount);
     Product product = ProductDetailFragment.mProduct;
     product.setName(productName.getText().toString());
+    if(!validate(productPrice.getText().toString(),productAmount.getText().toString()))
+      return;
     product.setPrice(productPrice.getText().toString());
     product.setAmount(productAmount.getText().toString());
     Log.d("aici",product.toString());
@@ -122,6 +125,28 @@ public class ProductDetailActivity extends AppCompatActivity {
                         });
                       }
                     });
+  }
+
+  private boolean validate(String price, String amount) {
+    if (!price.matches("-?\\d+[.\\d+]?")) {
+      runOnUiThread(new Runnable() {
+        @Override
+        public void run() {
+          DialogUtils.showError(ProductDetailActivity.this, new Exception("invalid price"));
+        }
+      });
+      return false;
+    }
+    if (!amount.matches("-?\\d+")) {
+      runOnUiThread(new Runnable() {
+        @Override
+        public void run() {
+          DialogUtils.showError(ProductDetailActivity.this, new Exception("invalid amount"));
+        }
+      });
+      return false;
+    }
+    return true;
   }
 
   private void startProductListActivity() {

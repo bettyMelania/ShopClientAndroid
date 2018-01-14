@@ -7,8 +7,12 @@ import com.shop.betty.shopclient.R;
 import com.shop.betty.shopclient.content.Product;
 import com.shop.betty.shopclient.net.mapping.IdJsonObjectReader;
 import com.shop.betty.shopclient.net.mapping.ProductJsonObjectReader;
+import com.shop.betty.shopclient.service.ProductManager;
 
+import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.Properties;
 
 import io.socket.client.IO;
 import io.socket.client.Socket;
@@ -29,15 +33,22 @@ public class ProductSocketClient {
     Log.d(TAG, "created");
   }
 
-  public void subscribe(final ResourceChangeListener<Product> resourceListener) {
+  public void subscribe(final ResourceChangeListener<Product> resourceListener,ProductManager manager) {
     Log.d(TAG, "subscribe");
     mResourceListener = resourceListener;
     try {
-      mSocket = IO.socket(mContext.getString(R.string.api_url));
+      mSocket =IO.socket(mContext.getString(R.string.api_url));
       mSocket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
         @Override
         public void call(Object... args) {
           Log.d(TAG, "socket connected");
+          JSONObject json = new JSONObject();
+          try {
+            json.putOpt("token", manager.getCurrentUser().getToken());
+            mSocket.emit("authenticate", json);
+          } catch (JSONException e) {
+            e.printStackTrace();
+          }
         }
       });
       mSocket.on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
@@ -77,7 +88,7 @@ public class ProductSocketClient {
         public void call(Object... args) {
           try {
             String id = new IdJsonObjectReader().read((JSONObject) args[0]);
-            Log.d(TAG, String.format("note deleted %s", id));
+            Log.d(TAG, String.format("product deleted %s", id));
             mResourceListener.onDeleted(id);
           } catch (Exception e) {
             Log.w(TAG, "product deleted", e);

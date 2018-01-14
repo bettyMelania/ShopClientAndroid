@@ -1,7 +1,6 @@
 package com.shop.betty.shopclient.service;
 
 import android.content.Context;
-import android.text.Editable;
 import android.util.Log;
 
 import com.shop.betty.shopclient.content.Database;
@@ -80,6 +79,7 @@ public class ProductManager extends Observable {
         if (Products != null) {
           mProductsLastUpdate = result.getLastModified();
           updateCachedProducts(Products);
+          mKD.saveProducts(Products);
         }
         successListener.onSuccess(cachedProductsByUpdated());
         notifyObservers();
@@ -88,9 +88,9 @@ public class ProductManager extends Observable {
   }
 
   public Cancellable getProductAsync(
-      final String ProductId,
-      final OnSuccessListener<Product> successListener,
-      final OnErrorListener errorListener) {
+          final String ProductId,
+          final OnSuccessListener<Product> successListener,
+          final OnErrorListener errorListener) {
     Log.d(TAG, "getProductAsync...");
     return mProductRestClient.readAsync(ProductId, new OnSuccessListener<Product>() {
 
@@ -113,9 +113,9 @@ public class ProductManager extends Observable {
   }
 
   public Cancellable saveProductAsync(
-      final Product Product,
-      final OnSuccessListener<Product> successListener,
-      final OnErrorListener errorListener) {
+          final Product Product,
+          final OnSuccessListener<Product> successListener,
+          final OnErrorListener errorListener) {
     Log.d(TAG, "saveProductAsync...");
     return mProductRestClient.updateAsync(Product, new OnSuccessListener<Product>() {
 
@@ -131,7 +131,7 @@ public class ProductManager extends Observable {
   }
 
   public void subscribeChangeListener() {
-      mProductSocketClient.subscribe(new ResourceChangeListener<Product>() {
+    mProductSocketClient.subscribe(new ResourceChangeListener<Product>() {
       @Override
       public void onCreated(Product Product) {
         Log.d(TAG, "changeListener, onCreated");
@@ -153,12 +153,14 @@ public class ProductManager extends Observable {
         }
       }
 
-      private void ensureProductCached(Product Product) {
-        if (!Product.equals(mProducts.get(Product.getId()))) {
+      private void ensureProductCached(Product product) {
+        if (!product.equals(mProducts.get(product.getId()))) {
           Log.d(TAG, "changeListener, cache updated");
-          mProducts.put(Product.getId(), Product);
+          mProducts.put(product.getId(), product);
+          mKD.updateProduct(product);
           setChanged();
           notifyObservers();
+          Log.d(TAG, "notified");
         }
       }
       @Override()
@@ -167,15 +169,15 @@ public class ProductManager extends Observable {
       }
 
 
-        @Override
+      @Override
       public void onError(Throwable t) {
         Log.e(TAG, "changeListener, error", t);
       }
-    });
+    },this);
   }
 
   public void unsubscribeChangeListener() {
-      mProductSocketClient.unsubscribe();
+    mProductSocketClient.unsubscribe();
   }
 
   public void setProductSocketClient(ProductSocketClient ProductSocketClient) {
@@ -201,26 +203,26 @@ public class ProductManager extends Observable {
   }
 
   public Cancellable loginAsync(
-      String username, String password,
-      final OnSuccessListener<String> successListener,
-      final OnErrorListener errorListener) {
+          String username, String password,
+          final OnSuccessListener<String> successListener,
+          final OnErrorListener errorListener) {
     final User user = new User(username, password);
     return mProductRestClient.getToken(
-        user, new OnSuccessListener<String>() {
+            user, new OnSuccessListener<String>() {
 
-          @Override
-          public void onSuccess(String token) {
-            mToken = token;
-            if (mToken != null) {
-              user.setToken(mToken);
-              setCurrentUser(user);
-              mKD.saveUser(user);
-              successListener.onSuccess(mToken);
-            } else {
-              errorListener.onError(new ResourceException(new IllegalArgumentException("Invalid credentials")));
-            }
-          }
-        }, errorListener);
+              @Override
+              public void onSuccess(String token) {
+                mToken = token;
+                if (mToken != null) {
+                  user.setToken(mToken);
+                  setCurrentUser(user);
+                  mKD.saveUser(user);
+                  successListener.onSuccess(mToken);
+                } else {
+                  errorListener.onError(new ResourceException(new IllegalArgumentException("Invalid credentials")));
+                }
+              }
+            }, errorListener);
   }
 
   public void setCurrentUser(User currentUser) {
@@ -230,6 +232,18 @@ public class ProductManager extends Observable {
 
   public User getCurrentUser() {
     return mKD.getCurrentUser();
+  }
+
+  public List<Product> getProductsFromDatabase() {
+    return mKD.getProducts();
+  }
+
+  public void logout() {
+    mKD.deleteUser();
+  }
+
+  public Product getProductFromDatabase(String string) {
+    return mKD.getProduct(string);
   }
 
   private class ProductByUpdatedComparator implements java.util.Comparator<Product> {

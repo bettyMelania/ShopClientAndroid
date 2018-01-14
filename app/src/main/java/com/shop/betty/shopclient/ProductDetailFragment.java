@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.shop.betty.shopclient.content.Product;
 import com.shop.betty.shopclient.util.Cancellable;
 import com.shop.betty.shopclient.util.DialogUtils;
+import com.shop.betty.shopclient.util.Network;
 import com.shop.betty.shopclient.util.OnErrorListener;
 import com.shop.betty.shopclient.util.OnSuccessListener;
 
@@ -44,8 +45,6 @@ public class ProductDetailFragment extends Fragment {
         Log.d(TAG, "onCreate");
         super.onCreate(savedInstanceState);
         if (getArguments().containsKey(PRODUCT_ID)) {
-            // In a real-world scenario, use a Loader
-            // to load content from a content provider.
             Activity activity = this.getActivity();
             mAppBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
         }
@@ -60,8 +59,14 @@ public class ProductDetailFragment extends Fragment {
         mProductName = (EditText) rootView.findViewById(R.id.product_name);
         mProductPrice = (EditText) rootView.findViewById(R.id.product_price);
         mProductAmount = (EditText) rootView.findViewById(R.id.product_amount);
-        fillProductDetails();
-        fetchProductAsync();
+        if(Network.isNetworkConnected(mProductName.getContext())) {
+            fetchProductAsync();
+        }
+        else{
+            Log.d("aici",getArguments().getString(PRODUCT_ID) );
+            mProduct=mApp.getProductManager().getProductFromDatabase(getArguments().getString(PRODUCT_ID));
+            fillProductDetails();
+        }
         return rootView;
     }
 

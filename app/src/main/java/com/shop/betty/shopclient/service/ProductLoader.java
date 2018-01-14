@@ -60,7 +60,7 @@ public class ProductLoader extends OkAsyncTaskLoader<List<Product>> implements O
             deliverResult(mCachedProducts);
         }
         // Begin monitoring the underlying data source.
-        mProductManager.addObserver(this);
+        //mProductManager.addObserver(this);
         if (takeContentChanged() || mCachedProducts == null) {
             // When the observer detects a change, it should call onContentChanged()
             // on the Loader, which will cause the next call to takeContentChanged()
@@ -92,7 +92,7 @@ public class ProductLoader extends OkAsyncTaskLoader<List<Product>> implements O
             mCachedProducts = null;
         }
         // The Loader is being reset, so we should stop monitoring for changes.
-        mProductManager.deleteObserver(this);
+       // mProductManager.deleteObserver(this);
     }
 
     @Override
